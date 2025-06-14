@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+import os
 
 from livekit import agents
 from livekit.agents import AgentSession, Agent, RoomInputOptions
@@ -8,6 +9,7 @@ from livekit.plugins import (
     deepgram,
     noise_cancellation,
     silero,
+    bithuman,
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
@@ -28,6 +30,13 @@ async def entrypoint(ctx: agents.JobContext):
         turn_detection=MultilingualModel(),
     )
 
+    # Initialize and start the avatar
+    avatar = bithuman.AvatarSession(
+        model_path=os.getenv("BITHUMAN_MODEL_PATH"),
+        api_secret=os.getenv("BITHUMAN_API_SECRET"),
+    )
+    await avatar.start(session, room=ctx.room)
+
     await session.start(
         room=ctx.room,
         agent=Assistant(),
@@ -44,7 +53,6 @@ async def entrypoint(ctx: agents.JobContext):
     await session.generate_reply(
         instructions="Greet the user and offer your assistance."
     )
-
 
 if __name__ == "__main__":
     agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))
