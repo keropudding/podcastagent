@@ -24,7 +24,9 @@ class Assistant(Agent):
 async def entrypoint(ctx: agents.JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="multi"),
-        llm=openai.LLM(model="gpt-4o-mini"),
+        llm=openai.LLM(model="inflection/inflection-3-pi",
+                       api_key=os.getenv("OPENROUTER_API_KEY"),
+                       base_url=os.getenv("OPENROUTER_BASE_URL")),
         tts=resemble.TTS(voice_uuid="55592656"),
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),
