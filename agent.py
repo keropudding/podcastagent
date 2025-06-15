@@ -27,7 +27,7 @@ async def entrypoint(ctx: agents.JobContext):
         llm=openai.LLM(model="inflection/inflection-3-pi",
                        api_key=os.getenv("OPENROUTER_API_KEY"),
                        base_url=os.getenv("OPENROUTER_BASE_URL")),
-        tts=resemble.TTS(voice_uuid="55592656"),
+        tts=resemble.TTS(voice_uuid="8bedd793"),
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),
     )
